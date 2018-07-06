@@ -25,6 +25,13 @@ def add_redis():
     redis_info.save()
     return ResponseUtil.standard_response(redis_info.dict())
 
+@app.route('/api/redis_info', methods=['GET'])
+def redis_info():
+    redis_info = RedisInfo.query.get(md5)
+    if redis_info:
+        return ResponseUtil.standard_response(redis_info.dict())
+    return ResponseUtil.standard_response('Not Found!')
+
 @app.route('/api/redis_list', methods=['GET'])
 def redis_list():
     redis_all = RedisInfo.query.all()
