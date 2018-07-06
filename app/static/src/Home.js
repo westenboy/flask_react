@@ -1,11 +1,11 @@
 import React from 'react';
 import axios from "axios";
 import qs from "qs";
-
+import TimeAgo from "timeago-react";
+import { Route,NavLink,HashRouter} from "react-router-dom";
 
 
 class Home extends React.Component {
-    static displayName = 'Index';
     constructor(props) {
         super(props);
         this.state = {redis_list: []};
@@ -28,10 +28,11 @@ class Home extends React.Component {
                     arr[i]["add_time"]=res.data.data[i].add_time;
 
             }
-
+                this.setState({redis_list: arr});
+                console.log(this.state.redis_list);
             }
         );
-        this.setState({redis_list: arr});
+
   }
 
     onBtnSubmit() {
@@ -78,50 +79,48 @@ class Home extends React.Component {
     //
     // }
 
-    // render(){
-    //     return (
-    //         <div>
-    //             <h1>Redis Instance List - Redis Monitor Informations </h1>
-    //
-    //             <form ref='form'>
-    //                 Host: <input type="text" placeholder="Redis host / ip" ref="new_host"/>&nbsp;&nbsp;
-    //                 Port: <input type="text" placeholder="6379" ref="new_port"/>&nbsp;&nbsp;
-    //                 Password: <input type="text" placeholder="password" ref="new_password"/>&nbsp;&nbsp;
-    //                 <input type="button" onClick={this.onBtnSubmit} defaultValue="Add / Update"/>&nbsp;
-    //                 <input type="button" onClick={this.onBtnExample} defaultValue="Example"/>
-    //             </form>
-    //
-    //             <table width="100%" border="0" cellPadding="10" cellSpacing="1" style={{margin: '1em 0'}}>
-    //                 <tbody>
-    //                 <tr>
-    //                     <th width="40%" bgcolor="#DDEEFF">Redis Information</th>
-    //                     <th width="40%" bgcolor="#DDEEFF">Add Datetime</th>
-    //                     <th width="20%" bgcolor="#DDEEFF">Operation</th>
-    //                 </tr>
-    //                 {
-    //                     this.state.redis_list.map(function (redis, i) {
-    //                         return (
-    //                             <tr key={i}>
-    //                                 <td><Link to={redis.md5}>{redis.host}:{redis.port}</Link></td>
-    //                                 <td>
-    //                                     {redis.add_time} [
-    //                                     <div datetime={redis.add_time || new Date()}/>
-    //                                     ]
-    //                                 </td>
-    //                                 <td><input type="button" onClick={this.onDelRedis.bind(this, redis.md5)}
-    //                                            defaultValue="Delete"/></td>
-    //                             </tr>
-    //                         )
-    //                     }.bind(this))
-    //                 }
-    //                 </tbody>
-    //             </table>
-    //         </div>
-    //     );
-    // }
-        render(){
-            return <div>{ this.state.redis_list[0].host}</div>
-        }
+    render(){
+        return (
+            <div>
+                <h1>Redis Instance List - Redis Monitor Informations </h1>
+
+                <form ref='form'>
+                    Host: <input type="text" placeholder="Redis host / ip" ref="new_host"/>&nbsp;&nbsp;
+                    Port: <input type="text" placeholder="6379" ref="new_port"/>&nbsp;&nbsp;
+                    Password: <input type="text" placeholder="password" ref="new_password"/>&nbsp;&nbsp;
+                    <input type="button" onClick={this.onBtnSubmit} defaultValue="Add / Update"/>&nbsp;
+                    <input type="button" onClick={this.onBtnExample} defaultValue="Example"/>
+                </form>
+
+                <table width="100%" border="0" cellPadding="10" cellSpacing="1" style={{margin: '1em 0'}}>
+                    <tbody>
+                    <tr>
+                        <th width="40%" bgcolor="#DDEEFF">Redis Information</th>
+                        <th width="40%" bgcolor="#DDEEFF">Add Datetime</th>
+                        <th width="20%" bgcolor="#DDEEFF">Operation</th>
+                    </tr>
+                    {
+                        this.state.redis_list.map(function (redis, i) {
+                            return (
+                                <tr key={i}>
+                                    <td><NavLink to={redis.md5}>{redis.host}:{redis.port}</NavLink></td>
+                                    <td>
+                                        {redis.add_time} [
+                                        <TimeAgo datetime={redis.add_time || new Date()}/>
+                                        ]
+                                    </td>
+                                    <td><input type="button"
+                                               defaultValue="Delete"/></td>
+                                </tr>
+                            )
+                        }.bind(this))
+                    }
+                    </tbody>
+                </table>
+            </div>
+        );
+    }
+
 }
 
 export default Home
